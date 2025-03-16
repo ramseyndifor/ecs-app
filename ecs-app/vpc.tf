@@ -15,7 +15,7 @@ resource "aws_vpc" "ecs-app-vpc" {
 #private subnets
 resource "aws_subnet" "privsub_1" {
   vpc_id     = aws_vpc.ecs-app-vpc.id
-  cidr_block = "10.0.10.0/24"
+  cidr_block = "10.10.16.0/26"
   availability_zone = "us-east-1a"
 
   tags = merge(
@@ -28,7 +28,7 @@ resource "aws_subnet" "privsub_1" {
 
 resource "aws_subnet" "privsub_2" {
   vpc_id     = aws_vpc.ecs-app-vpc.id
-  cidr_block = "10.0.20.0/24"
+  cidr_block = "10.10.16.64/26"
   availability_zone = "us-east-1b"
 
   tags = merge(
@@ -42,7 +42,7 @@ resource "aws_subnet" "privsub_2" {
 #public subnets
 resource "aws_subnet" "pubsub_1" {
   vpc_id     = aws_vpc.ecs-app-vpc.id
-  cidr_block = "10.0.30.0/24"
+  cidr_block = "10.10.16.128/26"
   availability_zone = "us-east-1a"
 
   tags = merge(
@@ -55,7 +55,7 @@ resource "aws_subnet" "pubsub_1" {
 
 resource "aws_subnet" "pubsub_2" {
   vpc_id     = aws_vpc.ecs-app-vpc.id
-  cidr_block = "10.0.40.0/24"
+  cidr_block = "10.10.16.192/26"
   availability_zone = "us-east-1b"
 
   tags = merge(

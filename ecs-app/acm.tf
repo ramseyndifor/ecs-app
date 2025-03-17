@@ -18,7 +18,7 @@ resource "aws_route53_record" "cert_validation" {
     }
   }
 
-  zone_id = data.aws_route53_zone.example.zone_id
+  zone_id = data.aws_route53_zone.r53_hosted_zone.zone_id
   name    = each.value.name
   type    = each.value.type
   records = [each.value.value]

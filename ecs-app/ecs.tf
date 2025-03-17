@@ -4,7 +4,7 @@ resource "aws_lb" "ecs_lb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.ecs_sg.id]
-  subnets            = [aws_subnet.privsub_1.id, aws_subnet.privsub_2.id]
+  subnets            = [aws_subnet.pubsub_1.id, aws_subnet.pubsub_2.id]
 }
 
 resource "aws_lb_target_group" "ecs_lb_tg" {
@@ -26,6 +26,8 @@ resource "aws_lb_listener" "ecs_lb_listener" {
   }
 }
 
+
+# ECS resources
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${local.project}-cluster"
 }
@@ -100,4 +102,40 @@ resource "aws_appautoscaling_policy" "ecs" {
     scale_in_cooldown  = 60
     scale_out_cooldown = 60
   }
+}
+
+# ECR registry
+resource "aws_ecr_repository" "ecr_registory" {
+  name                 = "ecs-app-repo"
+  image_tag_mutability = "MUTABLE"
+
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
+  repository = aws_ecr_repository.ecr_registory.name
+
+  policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1
+        description  = "Expire untagged images after 30 days"
+        selection = {
+          tagStatus   = "untagged"
+          countType   = "sinceImagePushed"
+          countUnit   = "days"
+          countNumber = 30
+        }
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
 }

@@ -1,11 +1,12 @@
 # Request a wildcard SSL certificate for the imported domain
 resource "aws_acm_certificate" "wildcard_cert" {
   domain_name       = "*.${data.aws_route53_zone.r53_hosted_zone.name}"  # Wildcard certificate
+  #subject_alternative_names = ["ecs.${data.aws_route53_zone.r53_hosted_zone.name}"]
   validation_method = "EMAIL"
 
   validation_option {
-    domain_name       = "ramseyndifor.com"
-    validation_domain = "*.ramseyndifor.com"
+    domain_name       = "*.ramseyndifor.com"
+    validation_domain = "ramseyndifor.com"
   }
 
   lifecycle {

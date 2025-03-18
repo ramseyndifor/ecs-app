@@ -1,7 +1,12 @@
 # Request a wildcard SSL certificate for the imported domain
 resource "aws_acm_certificate" "wildcard_cert" {
   domain_name       = "*.${data.aws_route53_zone.r53_hosted_zone.name}"  # Wildcard certificate
-  validation_method = "DNS"
+  validation_method = "EMAIL"
+
+  validation_option {
+    domain_name       = "ramseyndifor.com"
+    validation_domain = "ramseyndifor.com"
+  }
 
   lifecycle {
     create_before_destroy = true
@@ -25,8 +30,8 @@ resource "aws_route53_record" "cert_validation" {
   ttl     = 60
 }
 
-# Validate the certificate
-resource "aws_acm_certificate_validation" "wildcard_cert_validation" {
-  certificate_arn         = aws_acm_certificate.wildcard_cert.arn
-  validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
-}
+# # Validate the certificate
+# resource "aws_acm_certificate_validation" "wildcard_cert_validation" {
+#   certificate_arn         = aws_acm_certificate.wildcard_cert.arn
+#   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
+# }

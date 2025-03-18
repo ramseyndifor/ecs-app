@@ -5,7 +5,7 @@ resource "aws_acm_certificate" "wildcard_cert" {
 
   validation_option {
     domain_name       = "ramseyndifor.com"
-    validation_domain = "ramseyndifor.com"
+    validation_domain = "*.ramseyndifor.com"
   }
 
   lifecycle {
